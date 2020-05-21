@@ -1,0 +1,5 @@
+#venv environemnt
+db_venv
+
+#pycache
+__pycache__/
