@@ -8,5 +8,6 @@ urlpatterns = [
     #home page
     path('', views.index, name='index'),
     path('posts/', views.posts, name='posts'),
-    path('posts/<int:post_id>', views.post, name='post')
+    path('posts/<int:post_id>', views.post, name='post'),
+    path('new_post/<int: post_id>', views.new_post, name='new_post'),
 ]
