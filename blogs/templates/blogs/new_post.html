@@ -4,7 +4,7 @@
 
 <form action="{% url 'blogs:new_post' %}" method='post'>
     {% csrf_token %}
-    {{ form.as_p}}
+    {{form.as_p}}
     <button name="submit">Submit Post</button>
 
 {% endblock content %}

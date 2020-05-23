@@ -9,7 +9,7 @@ def index(request):
 
 def posts(request):
     """Show all blogposts, abreviated"""
-    posts = BlogPost.objects.order_by('date_added')
+    posts = BlogPost.objects.order_by('-date_added')
     context = {'posts': posts}
     return render(request, 'blogs/posts.html', context)
 
@@ -21,15 +21,14 @@ def post(request, post_id):
 
 def new_post(request):
     """Add a new post"""
-    if request != 'POST':
+    if request.method != 'POST':
         #No data submitted; create a blank form
         form = BlogForm()
     else:
         #POST data submitted; process data
         form = BlogForm(data=request.POST)
         if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.save()
+            form.save()
             return redirect('blogs:posts')
     
     #Display a blank or invalid form
