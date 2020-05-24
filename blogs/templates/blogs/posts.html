@@ -15,6 +15,8 @@
         {{post.text|slice:":10"}}...<a href="{% url 'blogs:post' post.id %}">Read More</a>
         <br>
         Date added: {{ post.date_added }}
+        <br>
+        <a href="{% url 'blogs:edit_post' post.id %}">Edit Post</a>
       </div>
     </div> <!-- panel -->
 

@@ -1,0 +1,18 @@
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h1>
+        {{ post.title }}
+      </h1>
+    </div>
+    <p> Edit Entry </p>
+    <form action = "{% url 'blogs:edit_post' post.id %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="Submit">Save Changes</button>
+    </form>
+  </div> <!-- panel -->
+{% endblock content %}
