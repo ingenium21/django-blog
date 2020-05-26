@@ -23,7 +23,9 @@
           Date added: {{ post.date_added }}
         {% endif %}
         <br>
+        {% if user == post.owner %}
         <a href="{% url 'blogs:edit_post' post.id %}">Edit Post</a>
+        {% endif %}
       </div>
     </div> <!-- panel -->
 
