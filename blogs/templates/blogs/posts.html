@@ -7,14 +7,21 @@
     {% for post in posts %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3>
-          {{ post.title }}
-        </h3>
+        <h2>
+          <a href="{% url 'blogs:post' post.id %}">{{ post.title }}</a>
+        </h2>
+        <p>by {{ post.owner }}</p>
       </div>
       <div class="panel-body">
-        {{post.text|slice:":10"}}...<a href="{% url 'blogs:post' post.id %}">Read More</a>
-        <br>
-        Date added: {{ post.date_added }}
+        {% if post.text|length > 100 %}
+          {{post.text|slice:":25"}}...<a href="{% url 'blogs:post' post.id %}">Read More</a>
+          <br>
+          Date added: {{ post.date_added }}
+        {% else %}
+          {{post.text}}
+          <br>
+          Date added: {{ post.date_added }}
+        {% endif %}
         <br>
         <a href="{% url 'blogs:edit_post' post.id %}">Edit Post</a>
       </div>

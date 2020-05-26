@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 from .models import BlogPost
 from .forms import BlogForm
@@ -19,6 +21,7 @@ def post(request, post_id):
     context = {'post': post}
     return render(request, 'blogs/post.html', context)
 
+@login_required
 def new_post(request):
     """Add a new post"""
     if request.method != 'POST':
@@ -28,26 +31,31 @@ def new_post(request):
         #POST data submitted; process data
         form = BlogForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            new_blog = form.save(commit=False)
+            new_blog.owner = request.user
+            new_blog.save()
             return redirect('blogs:posts')
     
     #Display a blank or invalid form
     context = {'form': form}
     return render(request, 'blogs/new_post.html', context)
 
+@login_required
 def edit_post(request, post_id):
     """Edit an existing post"""
     post = BlogPost.objects.get(id=post_id)
-    
-    if request.method != 'POST':
-        #Initial request; pre-fill form with the current post
-        form = BlogForm(instance=post)
+    if post.owner != request.user:
+        raise Http404
     else:
-        #POST data submitted, process data
-        form = BlogForm(instance=post, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('blogs:post', post_id=post.id)
+        if request.method != 'POST':
+            #Initial request; pre-fill form with the current post
+            form = BlogForm(instance=post)
+        else:
+            #POST data submitted, process data
+            form = BlogForm(instance=post, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('blogs:post', post_id=post.id)
     
     context = {'post': post, 'form': form}
     return render(request, 'blogs/edit_post.html', context)
