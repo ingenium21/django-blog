@@ -44,18 +44,21 @@ def new_post(request):
 def edit_post(request, post_id):
     """Edit an existing post"""
     post = BlogPost.objects.get(id=post_id)
-    if post.owner != request.user:
-        raise Http404
+    check_topic_owner(post, request)
+    
+    if request.method != 'POST':
+        #Initial request; pre-fill form with the current post
+        form = BlogForm(instance=post)
     else:
-        if request.method != 'POST':
-            #Initial request; pre-fill form with the current post
-            form = BlogForm(instance=post)
-        else:
-            #POST data submitted, process data
-            form = BlogForm(instance=post, data=request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('blogs:post', post_id=post.id)
+        #POST data submitted, process data
+        form = BlogForm(instance=post, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogs:post', post_id=post.id)
     
     context = {'post': post, 'form': form}
     return render(request, 'blogs/edit_post.html', context)
+
+def check_topic_owner(post, request):
+    if post.owner != request.user:
+        raise Http404
