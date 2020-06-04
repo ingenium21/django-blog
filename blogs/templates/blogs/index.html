@@ -1,7 +1,13 @@
 {% extends "blogs/base.html" %}
 
-{% block content %}
-<p>Ren's Blog</p>
-
-<p>Ren's blog is a project I am doing to create my own blog using Django</p>
-{% endblock content %}
+{% block page_header %}
+  <div class="jumbotron">
+      <h1 class="display-3">Welcome to Ren's blog</h1>
+      <p class="lead">
+        Welcome to Ren's blog, feel free to submit your own posts.
+     </p>
+      <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">
+          Register &raquo;
+      </a>
+  </div>
+{% endblock page_header %}

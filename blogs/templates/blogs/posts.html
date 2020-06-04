@@ -1,18 +1,20 @@
 {% extends "blogs/base.html" %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h1>Posts</h1>
+{% endblock page_header%}
 
 {% block content %}
-<p>Posts</p>
-
 <ul>
     {% for post in posts %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2>
+    <div class="card mb-3">
+        <h4 class="card-header">
           <a href="{% url 'blogs:post' post.id %}">{{ post.title }}</a>
-        </h2>
-        <p>by {{ post.owner }}</p>
-      </div>
-      <div class="panel-body">
+        </h4>
+      <div class="card-body">
+        <h5>by {{ post.owner }}</h5>
+        <br>
         {% if post.text|length > 100 %}
           {{post.text|slice:":25"}}...<a href="{% url 'blogs:post' post.id %}">Read More</a>
           <br>
@@ -24,7 +26,7 @@
         {% endif %}
         <br>
         {% if user == post.owner %}
-        <a href="{% url 'blogs:edit_post' post.id %}">Edit Post</a>
+        <small><a href="{% url 'blogs:edit_post' post.id %}">Edit Post</a></small>
         {% endif %}
       </div>
     </div> <!-- panel -->
